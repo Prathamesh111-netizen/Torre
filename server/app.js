@@ -21,6 +21,7 @@ app.use(morgan("dev"));
 
 app.use("/api/users", require("./routes/user.routes"));
 app.use("/api/favorites", require("./routes/favorites.routes"));
+app.use("/api/search", require("./routes/query.routes"));
 
 app.get("/", (req, res) => {
   res.send("hello world");
