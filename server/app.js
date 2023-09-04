@@ -16,7 +16,22 @@ const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 const app = express();
 
-app.use(cors());
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Credentials", true);
+  next();
+});
+
+app.use(
+  cors({
+    // credentials: true,
+    origin: process.env.FRONTEND_URL,
+    // transports: ["websocket", "polling"],
+    methods: ["GET", "POST", "DELETE", "PUT"],
+    allowEIO3: true,
+  })
+);
+
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));

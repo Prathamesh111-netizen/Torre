@@ -4,6 +4,7 @@ const checkAuth = async (req, res, next) => {
   try {
     const privateKey = process.env.PRIVATE_KEY;
     const token = req.cookies.userinfo;
+    console.log(req.cookies);
     const decoded = jwt.verify(token, privateKey);
     req.userId = decoded.id;
     next();

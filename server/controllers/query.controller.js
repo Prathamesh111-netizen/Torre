@@ -1,12 +1,6 @@
 const User = require("../models/user.model");
 
 const getQuery = async (req, res) => {
-  // store the query in the database
-
-  // get the query from the database
-
-  // return the query
-
   try {
     const q = req.query.q;
 
@@ -32,12 +26,35 @@ const getQuery = async (req, res) => {
 
     user.save();
 
-    // find the user with q in the username
+    // find the user with q in the username, return 10 results
     const users = await User.find({ username: { $regex: q, $options: "i" } });
-    return res.status(200).json({ users: users, message: "Query successful" });
+    const responseusers = users.slice(0, Math.min(users.length, 10));
+    // remove recent queries from the response
+    let r=[];
+    responseusers.forEach((user) => {
+      r.push({ username: user.username, _id: user._id });
+    });
+    console.log(responseusers);
+    
+    return res.status(200).json({ users: r, message: "Query successful" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-module.exports = { getQuery };
+const recentQueries = (req, res) => {
+  try{
+    const userId = req.userId;
+    User.findById(userId)
+    .then((user) => {
+      return res.status(200).json({ recentQueries: user.recentQueries });
+    })
+    .catch((err) => {
+      return res.status(500).json({ message: err.message });
+    });
+  }catch(err){
+    res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports = { getQuery , recentQueries};

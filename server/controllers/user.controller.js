@@ -26,8 +26,8 @@ exports.signup = async (req, res) => {
 // get user by id
 exports.getUserById = async (req, res) => {
   try {
-    const id = req.params.id;
-    const user = await User.findById(id);
+    const username = req.params.username;
+    const user = await User.findOne({ username: username });
     res.status(200).json(user);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -56,15 +56,15 @@ exports.login = async (req, res) => {
     // if password matches, return success message
     // set cookie
     const privateKey = process.env.PRIVATE_KEY;
-    const token = jwt.sign({
+    const userinfo = jwt.sign({
         id: user._id,
         username: user.username,
     }, privateKey);
-    console.log(token);
-    res.cookie("userinfo", token, { maxAge: 3600000, httpOnly: true });
-    res.status(200).json({ message: "Login successful" });
 
+    res.cookie("userinfo", userinfo, {httpOnly: true, secure: true, maxAge: (60 * 60 * 24 * 30) * 1000, sameSite: "none"}) 
+    res.status(200).json({ message: "Login successful" });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ message: err.message });
   }
 };

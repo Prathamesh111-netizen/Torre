@@ -4,10 +4,10 @@ const express = require("express");
 
 const router = express.Router();
 
-router
-  .use("/", checkAuth)
-  .get(FavoriteController.getFavorites)
-  .delete("/:userId", FavoriteController.removeFromFavorite)
-  .post("/:userId", FavoriteController.addToFavorite);
+router.delete("/:userId",checkAuth,  FavoriteController.removeFromFavorite)
+
+router.post("/:userId", checkAuth, FavoriteController.addToFavorite)
+
+router.get("/", checkAuth, FavoriteController.getFavorites)
 
 module.exports = router;
