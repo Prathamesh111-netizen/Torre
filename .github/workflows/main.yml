@@ -1,0 +1,39 @@
+name: Deployment workflow
+  
+on:
+  push: 
+    branches: 
+      - main
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - run: |
+          curl https://get.okteto.com -sSfL | sh
+          okteto context use https://cloud.okteto.com --token ${{ secrets.OKTETO_TOKEN }}
+          
+          # cd client
+          # npm install --force
+          # echo "${{ secrets.CLIENT_ENV_FILE }}" > .env
+          # CI=false npm run build
+          # mv build ../server
+          
+          cd ../server
+          ls
+          echo "${{ secrets.SERVER_ENV_FILE }}" > .env
+          okteto deploy --build --namespace=${{secrets.OKTETO_CFG_NAMESPACE }}
+          
+        
+    
+          
+          
+    
+  
+  
