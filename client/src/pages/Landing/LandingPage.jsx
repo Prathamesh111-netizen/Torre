@@ -33,6 +33,10 @@ function App() {
   const [anchorEll, setAnchorEll] = useState(null);
   const [allrecentSearches, setAllRecentSearches] = useState([]);
 
+  const openprofile = (username) => {
+    navigate(`/${username}`);
+  };
+
   const handleProfileMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -166,7 +170,7 @@ function App() {
         </Menu>
         <Grid container className="user-container" sx={{ marginTop: "2rem" }}>
           {filteredUsers.map((user) => (
-            <Grid item xs={12} sm={6} md={4} lg={8} key={user.id}>
+            <Grid item xs={12} sm={6} md={4} lg={8} key={user.id} onClick={()=>openprofile(user.username)}>
               <Paper elevation={6} className="app-card">
                 <Card>
                   <CardContent className="card-content">
@@ -198,24 +202,42 @@ function App() {
                         }
                         color="secondary"
                         onClick={() => {
-                          axios
-                            .post(
-                              `${
-                                import.meta.env.VITE_BACKEND_SERVER
-                              }/api/favorites/${user._id}`,
-                              {},
-                              {
-                                withCredentials: true,
-                              }
-                            )
-                            .then((res) => {
-                              console.log(res);
-                              user.isFavorite = !user.isFavorite;
-                              setFilteredUsers([...filteredUsers]);
-                            })
-                            .catch((err) => {
-                              console.log(err);
-                            });
+                          !user.isFavorite
+                            ? axios
+                                .post(
+                                  `${
+                                    import.meta.env.VITE_BACKEND_SERVER
+                                  }/api/favorites/${user._id}`,
+                                  {},
+                                  {
+                                    withCredentials: true,
+                                  }
+                                )
+                                .then((res) => {
+                                  console.log(res);
+                                  user.isFavorite = !user.isFavorite;
+                                  setFilteredUsers([...filteredUsers]);
+                                })
+                                .catch((err) => {
+                                  console.log(err);
+                                })
+                            : axios
+                                .delete(
+                                  `${
+                                    import.meta.env.VITE_BACKEND_SERVER
+                                  }/api/favorites/${user._id}`,
+                                  {
+                                    withCredentials: true,
+                                  }
+                                )
+                                .then((res) => {
+                                  console.log(res);
+                                  user.isFavorite = !user.isFavorite;
+                                  setFilteredUsers([...filteredUsers]);
+                                })
+                                .catch((err) => {
+                                  console.log(err);
+                                });
                         }}
                       >
                         {user.isFavorite

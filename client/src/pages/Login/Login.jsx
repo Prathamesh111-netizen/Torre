@@ -35,6 +35,8 @@ function Signup() {
       })
       .catch((error) => {
         console.log(error);
+        toast.success(error.message);
+
       });
   };
 
