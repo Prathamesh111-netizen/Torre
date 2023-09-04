@@ -30,7 +30,8 @@ function Signup() {
       .then((response) => {
         console.log(response);
         toast.success(response.data.message);
-        navigate("/");
+        window.close();
+        window.open("/");
       })
       .catch((error) => {
         console.log(error);
@@ -67,6 +68,12 @@ function Signup() {
               Login into Account
             </Button>
           </Paper>
+          <Typography variant="body1">
+            Don't have an account?{" "}
+            <a href="/signup" className="signup-link">
+              Signup
+            </a>
+          </Typography>
         </Container>
       </div>
     </div>

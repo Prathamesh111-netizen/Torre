@@ -4,32 +4,42 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./ProfilePage.scss";
 import Avatar from "react-avatar";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Menu,
+  MenuItem,
+  InputBase,
+  Card,
+  CardContent,
+  Grid,
+  Paper,
+  Container,
+  Button,
+} from "@mui/material";
 
 function ProfilePage() {
-  // get username from url
-  // get avatar url from url
   const { username } = useParams();
-
-  const [avatarUrl, setAvatarUrl] = useState(
-    "https://youravatarurl.com/avatar.jpg"
-  );
-  const [favorites, setFavorites] = useState([
-    "Favorite 1",
-    "Favorite 2",
-    "Favorite 3",
-  ]);
+  const [favorites, setFavorites] = useState([]);
 
   const fetchProfileData = async () => {
     const response = await axios.get(
-      `${import.meta.env.VITE_BACKEND_SERVER}/api/users/${username}`
+      `${import.meta.env.VITE_BACKEND_SERVER}/api/users`, {
+        withCredentials: true,
+      }
     );
-    // setAvatarUrl(response.data.avatarUrl);
-    setFavorites(response.data.favoriteUsers);
+    console.log(response.data.favoriteUsers);
+    const {favoriteUsers} = response.data;
+    // remove the username from the favorites list
+    const filteredFavorites = favoriteUsers.filter((user) => user !== username);
+    setFavorites(filteredFavorites);
   };
 
   useEffect(() => {
     fetchProfileData();
-  }, [username]);
+  }, []);
 
   return (
     <div className="profile-page">
@@ -46,9 +56,34 @@ function ProfilePage() {
       <div className="favorites-list">
         <h2>My Favorites</h2>
         <ul>
-          {favorites.map((item, index) => (
-            <li key={index}>{item}</li>
+        <Grid container className="user-container" sx={{ marginTop: "2rem" }}>
+          {favorites.map((user, index) => (
+            <Grid item xs={12} sm={6} md={4} lg={12} key={index}>
+              <Paper elevation={6} className="app-card">
+                <Card>
+                  <CardContent className="card-content">
+                    <div className="name-avatar-sec">
+                      <Avatar
+                        color={Avatar.getRandomColor("sitebase", [
+                          "red",
+                          "green",
+                          "blue",
+                        ])}
+                        name={user}
+                        value="86%"
+                        size="60"
+                        round="20px"
+                      />
+                      <Typography variant="h5" sx={{ marginLeft: "2rem" }}>
+                        {user}
+                      </Typography>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Paper>
+            </Grid>
           ))}
+        </Grid>
         </ul>
       </div>
     </div>

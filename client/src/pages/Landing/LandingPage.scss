@@ -58,10 +58,12 @@
     flex-direction: column !important;
 }
 .app-card {
+  margin-top: 2rem;
+
   margin: 10px; // Adjust the margin as per your design
-  margin-left: 4rem;
-  width: 100%;
-  padding: 10px; // Adjust the padding as per your design
+  // margin-left: 4rem;
+  width: 80%;
+  // padding: 10px; // Adjust the padding as per your design
   transition: transform 0.2s ease-in-out; // Add a hover effect
   width: 100%;
 
@@ -69,18 +71,24 @@
     transform: scale(1.05); // Scale up the card on hover
   }
 
-  .MuiCardContent-root {
-    padding: 16px; // Adjust the padding within the card content
-  }
+  // .MuiCardContent-root {
+  //   // padding: 16px; // Adjust the padding within the card content
+  // }
 
   .MuiTypography-root {
     font-size: 1.2rem; // Adjust the font size of the username
   }
 }
 
+.name-avatar-sec{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
 .card-content{
     display: flex;
     flex-direction: row;
     align-items: center;
-    
+    justify-content: space-between;
 }

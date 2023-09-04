@@ -57,6 +57,10 @@ function Signup() {
             >
               Signup
             </Button>
+
+            <Typography variant="body1">
+              Already have an account? <a href="/login">Login</a>
+            </Typography>
           </Paper>
         </Container>
       </div>

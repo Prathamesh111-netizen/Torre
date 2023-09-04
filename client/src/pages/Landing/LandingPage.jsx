@@ -21,13 +21,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Avatar from "react-avatar";
 
-const usersData = [
-  { id: 1, username: "User 1" },
-  { id: 2, username: "User 2" },
-  { id: 3, username: "User 3" },
-  { id: 4, username: "User 4" },
-  // Add more user data here
-];
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 function App() {
   const navigate = useNavigate();
@@ -44,6 +39,14 @@ function App() {
 
   const handleProfileMenuClose = () => {
     setAnchorEl(null);
+    axios
+      .get(`${import.meta.env.VITE_BACKEND_SERVER}/api/users/`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+        navigate(`/${res.data.username}`);
+      });
   };
   const handlerecentMenuClick = (event) => {
     axios
@@ -112,8 +115,8 @@ function App() {
               onClose={handleProfileMenuClose}
             >
               <MenuItem onClick={handleProfileMenuClose}>My Profile</MenuItem>
-              <MenuItem onClick={handleProfileMenuClose}>My Favorites</MenuItem>
-              <MenuItem onClick={logout}>Logout</MenuItem>
+              {/* <MenuItem onClick={handleProfileMenuClose}>My Favorites</MenuItem> */}
+              {/* <MenuItem onClick={logout}>Logout</MenuItem> */}
             </Menu>
           </Toolbar>
         </Container>
@@ -161,14 +164,65 @@ function App() {
             </MenuItem>
           ))}
         </Menu>
-        <Grid container className="user-container">
+        <Grid container className="user-container" sx={{ marginTop: "2rem" }}>
           {filteredUsers.map((user) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={user.id}>
-              <Paper elevation={3} className="app-card">
+            <Grid item xs={12} sm={6} md={4} lg={8} key={user.id}>
+              <Paper elevation={6} className="app-card">
                 <Card>
                   <CardContent className="card-content">
-                    <Avatar color={Avatar.getRandomColor('sitebase', ['red', 'green', 'blue'])} name={user.username} value="86%" size="60" round="20px" />
-                    <Typography variant="h5" sx={{marginLeft:"2rem"}}>{user.username}</Typography>
+                    <div className="name-avatar-sec">
+                      <Avatar
+                        color={Avatar.getRandomColor("sitebase", [
+                          "red",
+                          "green",
+                          "blue",
+                        ])}
+                        name={user.username}
+                        value="86%"
+                        size="60"
+                        round="20px"
+                      />
+                      <Typography variant="h5" sx={{ marginLeft: "2rem" }}>
+                        {user.username}
+                      </Typography>
+                    </div>
+                    <div>
+                      <Button
+                        variant="outlined"
+                        startIcon={
+                          !user.isFavorite ? (
+                            <FavoriteBorderIcon />
+                          ) : (
+                            <FavoriteIcon />
+                          )
+                        }
+                        color="secondary"
+                        onClick={() => {
+                          axios
+                            .post(
+                              `${
+                                import.meta.env.VITE_BACKEND_SERVER
+                              }/api/favorites/${user._id}`,
+                              {},
+                              {
+                                withCredentials: true,
+                              }
+                            )
+                            .then((res) => {
+                              console.log(res);
+                              user.isFavorite = !user.isFavorite;
+                              setFilteredUsers([...filteredUsers]);
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                            });
+                        }}
+                      >
+                        {user.isFavorite
+                          ? "Remove from Favorites"
+                          : "Add to Favorites"}
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               </Paper>
