@@ -1,0 +1,86 @@
+/* App.scss */
+.app-root {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-bar {
+  background-color: #2196f3;
+}
+
+.title {
+  flex-grow: 1;
+}
+
+.search-container {
+  position: relative;
+  border-radius: 4px;
+  background-color: #fff;
+  margin-top: 40px;
+
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+
+  margin-right: 16px;
+  width: 100%;
+}
+
+.search-icon {
+  padding: 12px;
+  height: 100%;
+  margin-top: 40px;
+
+  position: absolute;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recent-search-button{
+    margin-top: 16px !important;
+    width: 100%;
+}
+
+.input-root {
+  color: inherit;
+}
+
+.input-input {
+  padding: 12px 12px 12px 40px;
+  width: 100%;
+  transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.user-container{
+    display: flex;
+    flex-direction: column !important;
+}
+.app-card {
+  margin: 10px; // Adjust the margin as per your design
+  margin-left: 4rem;
+  width: 100%;
+  padding: 10px; // Adjust the padding as per your design
+  transition: transform 0.2s ease-in-out; // Add a hover effect
+  width: 100%;
+
+  &:hover {
+    transform: scale(1.05); // Scale up the card on hover
+  }
+
+  .MuiCardContent-root {
+    padding: 16px; // Adjust the padding within the card content
+  }
+
+  .MuiTypography-root {
+    font-size: 1.2rem; // Adjust the font size of the username
+  }
+}
+
+.card-content{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+}

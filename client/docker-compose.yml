@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  torreclient:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: torreclient
+    container_name: torreclient
+    volumes:
+      - ./client0xkid/:/usr/app
+    ports:
+      - "5173:5173"
+
+volumes:
+  data-volume:
+  node_modules:
+  web-root:
+    driver: local
