@@ -56,13 +56,45 @@ exports.login = async (req, res) => {
     // if password matches, return success message
     // set cookie
     const privateKey = process.env.PRIVATE_KEY;
-    const userinfo = jwt.sign({
+    const userinfo = jwt.sign(
+      {
         id: user._id,
         username: user.username,
-    }, privateKey);
+      },
+      privateKey
+    );
 
-    res.cookie("userinfo", userinfo, {httpOnly: true, secure: true, maxAge: (60 * 60 * 24 * 30) * 1000, sameSite: "none"}) 
+    res.cookie("userinfo", userinfo, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 60 * 60 * 24 * 30 * 1000,
+      sameSite: "none",
+    });
     res.status(200).json({ message: "Login successful" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.getUser = async (req, res) => {
+  try {
+    const userId = req.userId;
+    let user = await User.findById(userId);
+
+    // find usernames of favorited users
+    const favoriteUserIds = user.favoriteUsers.map((favoriteUser) => {
+      return favoriteUser.userId;
+    });
+    const favoriteUsers = await User.find({ _id: { $in: favoriteUserIds } });
+    const favoriteUsernames = favoriteUsers.map((favoriteUser) => {
+      return favoriteUser.username;
+    });
+
+    user = user.toObject();
+    user.favoriteUsers = favoriteUsernames;
+
+    res.status(200).json(user);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: err.message });

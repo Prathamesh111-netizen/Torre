@@ -31,10 +31,21 @@ const getQuery = async (req, res) => {
     const responseusers = users.slice(0, Math.min(users.length, 10));
     // remove recent queries from the response
     let r=[];
-    responseusers.forEach((user) => {
-      r.push({ username: user.username, _id: user._id });
+    responseusers.forEach((ruser) => {
+      // check if the user is favorited by the current user
+      let isFavorite = false;
+      
+      console.log(ruser._id.toString());
+      user.favoriteUsers.forEach((favoriteUser) => {
+        console.log("inside")
+        console.log(favoriteUser.userId.toString())
+        if (favoriteUser.userId.toString() === ruser._id.toString()) {
+          isFavorite = true;
+        }
+      });
+
+      r.push({ username: ruser.username, _id: ruser._id, isFavorite });
     });
-    console.log(responseusers);
     
     return res.status(200).json({ users: r, message: "Query successful" });
   } catch (error) {

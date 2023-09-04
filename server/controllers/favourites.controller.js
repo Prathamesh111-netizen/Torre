@@ -20,12 +20,12 @@ const addToFavorite = async (req, res) => {
     );
 
     if (!isFavoriteUserAlreadyAdded)
-      user.favoriteUsers.push({ userId: favoriteUser });
+      user.favoriteUsers.push(favoriteUser);
     else
       return res
         .status(400)
         .json({ message: "User already added to favorites" });
-
+    user.save();
     res.status(200).json({ message: "User added to favorites" });
   } catch (err) {
     res.status(500).json({ message: err.message });
